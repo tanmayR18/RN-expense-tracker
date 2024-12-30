@@ -3,19 +3,26 @@ import React from "react";
 import { GlobalStyles } from "../../constant/style";
 import { getFormattedDate } from "../../util/date";
 import { useNavigation } from "@react-navigation/native";
+import { createExpense, deleteExpense, getExpense, updateExpense } from "../../util/http";
 
-const ExpensesItem = ({id, description, amount, date }) => {
+const ExpensesItem = ({ id, description, amount, date }) => {
+  const navigate = useNavigation();
 
-    const navigate = useNavigation();
-
-    const expensePressHandler = () => {
-        navigate.navigate('ManageExpenses', {
-            expenseId: id
-        })
-    }
+  const expensePressHandler = () => {
+    //   createExpense();
+    // getExpense();
+    // updateExpense();
+    deleteExpense();
+    // navigate.navigate('ManageExpenses', {
+    //     expenseId: id
+    // })
+  };
 
   return (
-    <Pressable onPress={expensePressHandler} style={({pressed}) => pressed && styles.pressed}>
+    <Pressable
+      onPress={expensePressHandler}
+      style={({ pressed }) => pressed && styles.pressed}
+    >
       <View style={styles.expenseItem}>
         <View>
           <Text style={[styles.textBase, styles.description]}>
