@@ -12,10 +12,11 @@ const ExpensesItem = ({ id, description, amount, date }) => {
     //   createExpense();
     // getExpense();
     // updateExpense();
-    deleteExpense();
-    // navigate.navigate('ManageExpenses', {
-    //     expenseId: id
-    // })
+    // deleteExpense();
+    navigate.navigate('ManageExpenses', {
+        expenseId: id
+    })
+    console.log(id, amount, date, description)
   };
 
   return (

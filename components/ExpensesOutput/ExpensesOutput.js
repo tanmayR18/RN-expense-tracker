@@ -1,11 +1,13 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useContext } from "react";
 import ExpensesSummary from "./ExpensesSummary";
 import ExpensesList from "./ExpensesList";
 import { GlobalStyles } from "../../constant/style";
+import { ExpenseContext } from "../../store/expense-context";
 
 const ExpensesOutput = ({ expenses, expensesPeriod, fallback }) => {
-  const content = <Text style={styles.infoText}>{fallback}</Text>;
+    const Context = useContext(ExpenseContext)
+  const content = <Pressable onPress={() => console.log(Context.expenses)}><Text  style={styles.infoText}>{fallback}</Text></Pressable>;
   return (
     <View style={styles.container}>
       {expenses.length ? (

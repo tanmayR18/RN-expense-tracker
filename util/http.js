@@ -1,46 +1,65 @@
-import axios from 'axios'
+import axios from "axios";
 
-const base_url = 'https://rn-expense-tracker-18-default-rtdb.firebaseio.com'
+const base_url = "https://rn-expense-tracker-18-default-rtdb.firebaseio.com";
 
-
-export const createExpense = async() => {
-   try{
-    console.log('createExpense called');
-    const response = await axios.post(`${base_url}/expense.json`,{amount: 6000, date: new Date('2024-12-29'), description: 'Tapa tap'})
+export const createExpense = async (data) => {
+  try {
+    console.log("createExpense called");
+    const response = await axios.post(`${base_url}/expense.json`, data);
+    console.log(response.data.name);
     return response.data.name;
-   } catch(error)  {
-    console.log(error)
+  } catch (error) {
+    console.log(error);
     return false;
-   }
-}
+  }
+};
 
-export const getExpense = async() => {
-    try{
-     const response = await axios.get(`${base_url}/expense.json`)
-     return response.data;
-    } catch(error)  {
-     console.log(error)
-     return false;
-    }
- }
+export const getExpense = async () => {
+  try {
+    const response = await axios.get(`${base_url}/expense.json`);
+    const data = Object.entries(response.data).map(([id, value]) => {
+        console.log({
+            ...value,
+        date: new Date(value.date.slice(0,10)),
+        id,
+        })
+      return {
+        ...value,
+        date: new Date(value.date.slice(0,10)),
+        id,
+      };
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
 
+export const updateExpense = async (id) => {
+  try {
+    const response = await axios.put(
+      `${base_url}/expense/-OFMIClW7Tfn98bPlyZO.json`,
+      {
+        amount: 12000,
+        date: new Date("2024-12-31"),
+        description: "Tapa tap!!!",
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
 
-export const updateExpense = async(id) => {
-    try{
-     const response = await axios.put(`${base_url}/expense/-OFMIClW7Tfn98bPlyZO.json`, {amount: 12000, date: new Date('2024-12-31'), description: 'Tapa tap!!!'})
-     return response.data;
-    } catch(error)  {
-     console.log(error)
-     return false;
-    }
- }
-
-export const deleteExpense = async(id) => {
-    try{
-     const response = await axios.delete(`${base_url}/expense/-OFMIClW7Tfn98bPlyZO.json`)
-     return response.data;
-    } catch(error)  {
-     console.log(error)
-     return 'Unable to delete'
-    }
- }
+export const deleteExpense = async (id) => {
+  try {
+    console.log("id", id);
+    const response = await axios.delete(`${base_url}/expense/${id}.json`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return "Unable to delete";
+  }
+};

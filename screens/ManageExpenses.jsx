@@ -5,13 +5,21 @@ import IconButton from "../components/UI/IconButton";
 import Button from "../components/UI/Button";
 import { ExpenseContext } from "../store/expense-context";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
-import { createExpense, deleteExpense, getExpense, updateExpense } from "../util/http";
+import {
+  createExpense,
+  deleteExpense,
+  getExpense,
+  updateExpense,
+} from "../util/http";
 
 const ManageExpenses = ({ route, navigation }) => {
   const editedExpenseId = route.params?.expenseId;
+  console.log("editedExpenseId", editedExpenseId);
   const ExpenseCtx = useContext(ExpenseContext);
   const isEditing = !!editedExpenseId;
-  const expense = ExpenseCtx.expenses.filter( item => item.id === editedExpenseId);
+  const expense = ExpenseCtx.expenses.filter(
+    (item) => item.id === editedExpenseId
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -19,26 +27,35 @@ const ManageExpenses = ({ route, navigation }) => {
     });
   }, [navigation, isEditing]);
 
-  function deleteHandler() {
-    ExpenseCtx.deleteExpense(editedExpenseId);
-    navigation.goBack();
+  async function deleteHandler() {
+    // const nullValue = await deleteExpense(editedExpenseId);
+    // if (nullValue === null) {
+    //   ExpenseCtx.deleteExpense(editedExpenseId);
+    //   navigation.goBack();
+    // }
   }
   function cancelHandler() {
     navigation.goBack();
   }
-  function confirmHandler(expenseData) {
+  async function confirmHandler(expenseData) {
     if (isEditing) {
       ExpenseCtx.updateExpense(editedExpenseId, expenseData);
     } else {
-      ExpenseCtx.addExpense(expenseData);
+      const id = await createExpense(expenseData);
+      ExpenseCtx.addExpense({ id: id, ...expenseData });
     }
     navigation.goBack();
   }
 
   return (
     <View style={styles.container}>
-      <ExpenseForm defaultValue={expense[0]} onSubmit={confirmHandler} onCancel={cancelHandler} label={isEditing ? 'Update' : 'Add'} />
-      
+      <ExpenseForm
+        defaultValue={expense[0]}
+        onSubmit={confirmHandler}
+        onCancel={cancelHandler}
+        label={isEditing ? "Update" : "Add"}
+      />
+
       {isEditing && (
         <View style={styles.deleteContainer}>
           <IconButton
@@ -61,7 +78,7 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: GlobalStyles.colors.primary800,
   },
-  
+
   deleteContainer: {
     marginTop: 16,
     paddingTop: 8,
