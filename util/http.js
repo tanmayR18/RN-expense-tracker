@@ -17,16 +17,19 @@ export const createExpense = async (data) => {
 export const getExpense = async () => {
   try {
     const response = await axios.get(`${base_url}/expense.json`);
+    if(!response.data){
+        return [];
+    }
     const data = Object.entries(response.data).map(([id, value]) => {
         console.log({
             ...value,
         date: new Date(value.date.slice(0,10)),
-        id,
+        id: id,
         })
       return {
         ...value,
         date: new Date(value.date.slice(0,10)),
-        id,
+        id: id,
       };
     });
     return data;
@@ -36,15 +39,11 @@ export const getExpense = async () => {
   }
 };
 
-export const updateExpense = async (id) => {
+export const updateExpense = async (id, data) => {
   try {
     const response = await axios.put(
-      `${base_url}/expense/-OFMIClW7Tfn98bPlyZO.json`,
-      {
-        amount: 12000,
-        date: new Date("2024-12-31"),
-        description: "Tapa tap!!!",
-      }
+      `${base_url}/expense/${id}.json`,
+      data
     );
     return response.data;
   } catch (error) {

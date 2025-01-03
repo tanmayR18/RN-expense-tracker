@@ -7,7 +7,7 @@ import { ExpenseContext } from "../../store/expense-context";
 
 const ExpensesOutput = ({ expenses, expensesPeriod, fallback }) => {
     const Context = useContext(ExpenseContext)
-  const content = <Pressable onPress={() => console.log(Context.expenses)}><Text  style={styles.infoText}>{fallback}</Text></Pressable>;
+  const content = <Text  style={styles.infoText}>{fallback}</Text>
   return (
     <View style={styles.container}>
       {expenses.length ? (

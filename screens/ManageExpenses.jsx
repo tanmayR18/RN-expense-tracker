@@ -28,17 +28,20 @@ const ManageExpenses = ({ route, navigation }) => {
   }, [navigation, isEditing]);
 
   async function deleteHandler() {
-    // const nullValue = await deleteExpense(editedExpenseId);
-    // if (nullValue === null) {
-    //   ExpenseCtx.deleteExpense(editedExpenseId);
-    //   navigation.goBack();
-    // }
+    console.log("delete id", editedExpenseId);
+    const nullValue = await deleteExpense(editedExpenseId);
+    if (nullValue === null) {
+      ExpenseCtx.deleteExpense(editedExpenseId);
+      navigation.goBack();
+    }
   }
   function cancelHandler() {
     navigation.goBack();
   }
   async function confirmHandler(expenseData) {
     if (isEditing) {
+      console.log("here", editedExpenseId, expenseData);
+      await updateExpense(editedExpenseId, expenseData);
       ExpenseCtx.updateExpense(editedExpenseId, expenseData);
     } else {
       const id = await createExpense(expenseData);
